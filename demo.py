@@ -18,6 +18,9 @@ from open_vocab_seg import add_ovseg_config
 
 from open_vocab_seg.utils import VisualizationDemo
 
+from icecream import install
+install()
+
 # constants
 WINDOW_NAME = "Open vocabulary segmentation"
 

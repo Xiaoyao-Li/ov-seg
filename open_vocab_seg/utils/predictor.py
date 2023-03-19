@@ -12,7 +12,7 @@ from detectron2.utils.visualizer import ColorMode, Visualizer
 class OVSegPredictor(DefaultPredictor):
     def __init__(self, cfg):
         super().__init__(cfg)
-
+        
     def __call__(self, original_image, class_names):
         """
         Args:
@@ -33,8 +33,29 @@ class OVSegPredictor(DefaultPredictor):
             image = torch.as_tensor(image.astype("float32").transpose(2, 0, 1))
 
             inputs = {"image": image, "height": height, "width": width, "class_names": class_names}
-            predictions = self.model([inputs])[0]
+            predictions = self.model([inputs for i in range(32)])
             return predictions
+
+
+class OVSegBatchPredictor(DefaultPredictor):
+    def __init__(self, cfg):
+        super().__init__(cfg)
+    
+    def __call__(self, batchdata):
+        """
+        Args:
+            original_image (np.ndarray): an image of shape (N, H, W, C) (in BGR order).
+
+        Returns:
+            predictions (dict):
+                the output of the model for a batch of images.
+                See :doc:`/tutorials/models` for details about the format.
+        """
+        with torch.no_grad():  # https://github.com/sphinx-doc/sphinx/issues/4258
+            # Apply pre-processing to image.
+            predictions = self.model(batchdata)
+            return predictions
+    
 
 class OVSegVisualizer(Visualizer):
     def __init__(self, img_rgb, metadata=None, scale=1.0, instance_mode=ColorMode.IMAGE, class_names=None):
