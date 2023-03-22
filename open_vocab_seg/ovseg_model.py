@@ -99,17 +99,30 @@ class OVSeg(MaskFormer):
         init_kwargs = MaskFormer.from_config(cfg)
         text_templates = build_text_prompt(cfg.MODEL.CLIP_ADAPTER)
 
-        clip_adapter = MaskFormerClipAdapter(
-            cfg.MODEL.CLIP_ADAPTER.CLIP_MODEL_NAME,
-            text_templates,
-            mask_fill=cfg.MODEL.CLIP_ADAPTER.MASK_FILL,
-            mask_expand_ratio=cfg.MODEL.CLIP_ADAPTER.MASK_EXPAND_RATIO,
-            mask_thr=cfg.MODEL.CLIP_ADAPTER.MASK_THR,
-            mask_matting=cfg.MODEL.CLIP_ADAPTER.MASK_MATTING,
-            region_resized=cfg.MODEL.CLIP_ADAPTER.REGION_RESIZED,
-            mask_prompt_depth=cfg.MODEL.CLIP_ADAPTER.MASK_PROMPT_DEPTH,
-            mask_prompt_fwd=cfg.MODEL.CLIP_ADAPTER.MASK_PROMPT_FWD,
-        )
+        if os.environ.get('SLURM') is not None:
+            clip_adapter = MaskFormerClipAdapter(
+                "/scratch/lipuhao/.cache/clip/ViT-L-14.pt",
+                text_templates,
+                mask_fill=cfg.MODEL.CLIP_ADAPTER.MASK_FILL,
+                mask_expand_ratio=cfg.MODEL.CLIP_ADAPTER.MASK_EXPAND_RATIO,
+                mask_thr=cfg.MODEL.CLIP_ADAPTER.MASK_THR,
+                mask_matting=cfg.MODEL.CLIP_ADAPTER.MASK_MATTING,
+                region_resized=cfg.MODEL.CLIP_ADAPTER.REGION_RESIZED,
+                mask_prompt_depth=cfg.MODEL.CLIP_ADAPTER.MASK_PROMPT_DEPTH,
+                mask_prompt_fwd=cfg.MODEL.CLIP_ADAPTER.MASK_PROMPT_FWD,
+            )
+        else:
+            clip_adapter = MaskFormerClipAdapter(
+                cfg.MODEL.CLIP_ADAPTER.CLIP_MODEL_NAME,
+                text_templates,
+                mask_fill=cfg.MODEL.CLIP_ADAPTER.MASK_FILL,
+                mask_expand_ratio=cfg.MODEL.CLIP_ADAPTER.MASK_EXPAND_RATIO,
+                mask_thr=cfg.MODEL.CLIP_ADAPTER.MASK_THR,
+                mask_matting=cfg.MODEL.CLIP_ADAPTER.MASK_MATTING,
+                region_resized=cfg.MODEL.CLIP_ADAPTER.REGION_RESIZED,
+                mask_prompt_depth=cfg.MODEL.CLIP_ADAPTER.MASK_PROMPT_DEPTH,
+                mask_prompt_fwd=cfg.MODEL.CLIP_ADAPTER.MASK_PROMPT_FWD,
+            )
         init_kwargs["clip_adapter"] = clip_adapter
         init_kwargs["clip_ensemble"] = cfg.MODEL.CLIP_ADAPTER.CLIP_ENSEMBLE
         init_kwargs[
