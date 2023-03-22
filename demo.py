@@ -81,11 +81,15 @@ if __name__ == "__main__":
     logger = setup_logger()
     logger.info("Arguments: " + str(args))
 
+    bs_test = args.bs_test
+    args_dict = vars(args)
+    del args_dict['bs_test']
+    args = argparse.Namespace(**args_dict)
     cfg = setup_cfg(args)
 
-    demo = VisualizationDemo(cfg, args.bs_test)
+    demo = VisualizationDemo(cfg, bs_test)
     class_names = args.class_names
-    ic(f"processing | bs: {args.bs_test}")
+    ic(f"processing | bs: {bs_test}")
     if args.input:
         if len(args.input) == 1:
             args.input = glob.glob(os.path.expanduser(args.input[0]))
@@ -120,4 +124,4 @@ if __name__ == "__main__":
                     break  # esc to quit
     else:
         raise NotImplementedError
-    ic(f"successfully processed | bs: {args.bs_test}")
+    ic(f"successfully processed | bs: {bs_test}")
