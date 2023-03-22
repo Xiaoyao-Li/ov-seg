@@ -12,5 +12,5 @@
 #SBATCH -o "/scratch/lipuhao/dev/MAH/DataPreprocess/ov-seg/outputs/slurm/%x.%j.out"
 #SBATCH -e "/scratch/lipuhao/dev/MAH/DataPreprocess/ov-seg/outputs/slurm/%x.%j.err"
 
-python demo.py --bs_test 16 --config-file configs/ovseg_swinB_vitL_demo.yaml --class-names 'Oculus' 'Ukulele'  --input ./resources/demo_samples/sample_03.jpeg --output ./pred --opts MODEL.WEIGHTS ./ckpts/ovseg_swinbase_vitL14_ft_mpt.pth
+python demo.py --bs_test 16 --config-file configs/ovseg_swinB_vitL_demo_slurm.yaml --class-names 'Oculus' 'Ukulele'  --input ./resources/demo_samples/sample_03.jpeg --output ./pred --opts MODEL.WEIGHTS ./ckpts/ovseg_swinbase_vitL14_ft_mpt.pth
 
