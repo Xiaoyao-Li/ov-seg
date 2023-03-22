@@ -62,6 +62,10 @@ def get_parser():
         "If not given, will show output in an OpenCV window.",
     )
     parser.add_argument(
+        "--bs_test",
+        type=int,
+    )
+    parser.add_argument(
         "--opts",
         help="Modify config options using the command-line 'KEY VALUE' pairs",
         default=[],
@@ -79,8 +83,9 @@ if __name__ == "__main__":
 
     cfg = setup_cfg(args)
 
-    demo = VisualizationDemo(cfg)
+    demo = VisualizationDemo(cfg, args.bs_test)
     class_names = args.class_names
+    ic(f"processing | bs: {args.bs_test}")
     if args.input:
         if len(args.input) == 1:
             args.input = glob.glob(os.path.expanduser(args.input[0]))
@@ -115,3 +120,4 @@ if __name__ == "__main__":
                     break  # esc to quit
     else:
         raise NotImplementedError
+    ic(f"successfully processed | bs: {args.bs_test}")

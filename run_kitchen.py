@@ -74,7 +74,7 @@ if __name__ == '__main__':
 
     cfg = setup_cfg(args)
 
-    dataloader = EpicKitchen(cfg, part='P01', clip='P01_01').get_dataloader(batch_size=256,
+    dataloader = EpicKitchen(cfg, part='P01', clip='P01_01').get_dataloader(batch_size=4,
                                                                             num_workers=4,
                                                                             collate_fn=collate_fn_general,
                                                                             pin_memory=True,
@@ -87,6 +87,3 @@ if __name__ == '__main__':
         st = time.time()
         predictions = predictor(batchdata)
         ic(time.time() - st)
-
-        
-

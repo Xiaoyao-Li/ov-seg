@@ -10,8 +10,9 @@ from detectron2.utils.visualizer import ColorMode, Visualizer
 
 
 class OVSegPredictor(DefaultPredictor):
-    def __init__(self, cfg):
+    def __init__(self, cfg, bs_test=16):
         super().__init__(cfg)
+        self.bs_test = bs_test
         
     def __call__(self, original_image, class_names):
         """
@@ -33,7 +34,7 @@ class OVSegPredictor(DefaultPredictor):
             image = torch.as_tensor(image.astype("float32").transpose(2, 0, 1))
 
             inputs = {"image": image, "height": height, "width": width, "class_names": class_names}
-            predictions = self.model([inputs for i in range(32)])
+            predictions = self.model([inputs for i in range(self.bs_test)])[0]
             return predictions
 
 
@@ -103,7 +104,7 @@ class OVSegVisualizer(Visualizer):
 
 
 class VisualizationDemo(object):
-    def __init__(self, cfg, instance_mode=ColorMode.IMAGE, parallel=False):
+    def __init__(self, cfg, bs_test, instance_mode=ColorMode.IMAGE, parallel=False):
         """
         Args:
             cfg (CfgNode):
@@ -122,7 +123,7 @@ class VisualizationDemo(object):
         if parallel:
             raise NotImplementedError
         else:
-            self.predictor = OVSegPredictor(cfg)
+            self.predictor = OVSegPredictor(cfg, bs_test=bs_test)
 
     def run_on_image(self, image, class_names):
         """
