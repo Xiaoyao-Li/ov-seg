@@ -43,8 +43,7 @@ MODEL:
     PRE_NORM: False
   CLIP_ADAPTER:
     TEXT_TEMPLATES: "vild"
-    CLIP_MODEL_NAME: "ViT-L/14"
-    # CLIP_MODEL_NAME_SLURM: "/scratch/lipuhao/.cache/clip/ViT-L-14.pt"
+    CLIP_MODEL_NAME: "/scratch/lipuhao/.cache/clip/ViT-L-14.pt"
     MASK_FILL: "mean"
     MASK_EXPAND_RATIO: 1.0
     MASK_THR: 0.35 # choose the foreground objects
